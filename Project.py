@@ -10,27 +10,34 @@ root.title('Bytesilog - SAPALARAN, MORAGA, RIOS')
 root.geometry("720x480")
 
 def open_file():
-    open_file = filedialog.askopenfilename()
-    text_file = open(open_file, 'r')
+    try:
+        open_file = filedialog.askopenfilename()
+        text_file = open(open_file, 'r')
 
-    global read_file
-    read_file = text_file.read()
+        global read_file
+        read_file = text_file.read()
 
-    text_box.insert(END, read_file)
-    text_file.close()
+        text_box.insert(END, read_file)
+        text_file.close()
 
-    return text_file
+        return text_file
+    except:
+        text_box.insert(END, "Invalid file")
+        print("Invalid file")
 
 def count_words():
     global word_count
     word_count = Counter(word_tokenize(read_file))
-    print(word_count)
+
+    text_box.insert(END, f'\n Number of occurrences of each word in the attached file:')
+    for key, value in word_count.items():
+        text_box.insert(END, f' \n {key} : {value}')
+        print(f''' 
+        {key} : {value}
+        ''')
     return
 
 def graph_word():
-    # words = word_tokenize(read_file)
-    # plt.plot(words)
-    # plt.show()
     fdist = FreqDist(word_tokenize(read_file))
     print(fdist)
     fdist.plot(101, cumulative=False)
